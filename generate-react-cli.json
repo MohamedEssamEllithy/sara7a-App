@@ -1,0 +1,19 @@
+{
+  "usesTypeScript": false,
+  "usesStyledComponents": true,
+  "testLibrary": "None",
+  "component": {
+    "default": {
+      "path": "src/components",
+      "customTemplates":{
+        "component":"templates/TemplateName.jsx",
+        "style":"templates/TemplateName.module.css"
+
+      },
+      "withStyle": true,
+      "withTest": false,
+      "withStory": false,
+      "withLazy": false
+    }
+  }
+}
