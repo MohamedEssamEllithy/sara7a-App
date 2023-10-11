@@ -12,8 +12,9 @@ import { useContext, useEffect } from 'react';
 import { TokenContext } from './components/Context/Context';
 import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
 
-import Sendmassage from './components/sendmassage/sendmassage';
+
 import { QueryClient, QueryClientProvider } from 'react-query';
+import Sendmessage from './components/sendmessage/sendmessage';
 
 const Routes = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const Routes = createBrowserRouter([
       { index: true, element: <Register /> },
       { path: "signup", element: <Register /> },
       { path: "login", element: <Login /> },
-      { path: "massage/:id", element: <Sendmassage/> },
+      { path: "message/:id", element: <Sendmessage/> },
       {
         path: "profile",
         element: (
@@ -50,11 +51,10 @@ useEffect(()=>{
 
   return (
     <>
-      {/* <QueryClientProvider client={queryClient}>
-      <Profile/>
-      </QueryClientProvider> */}
-
+      <QueryClientProvider client={queryClient}>
       <RouterProvider router={Routes}></RouterProvider>
+      </QueryClientProvider>
+
 
       
     </>

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import style from './sendmassage.module.css'
+import style from './sendmessage.module.css'
 import jwtDecode from 'jwt-decode';
 import avaterImg from "../../images/avatar.png";
 import { useFormik } from 'formik';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Sendmassage() {
+export default function Sendmessage() {
   let [userName, setuserName] = useState("");
   let recievedID = useParams()
   let[isloading,setisloading]=useState(false)
 
 
-  async function addMassage( values){
+  async function addmessage( values){
     try {
       setisloading(true);
       let data = {
@@ -44,7 +44,7 @@ let formik = useFormik({
   },
   onSubmit:(values)=>{
     
- addMassage(values)
+ addmessage(values)
 
   }
 });

@@ -12,40 +12,45 @@ import { useQuery, useQueryClient } from "react-query";
 export default function Profile() {
 
  
+  // const[allmessages ,setAllmessages]=useState([])
 let[userName,setuserName]=useState("")
 let [userId ,setuserId]=useState("")
-const[allmassages ,setAllmassages]=useState([])
 const [show, setShow] = useState(false);
 const [url] = useState("http://localhost:3000");
 const handleClose = () => setShow(false);
 const handleShow = () => setShow(true);
+const {
+  data: messages,
+  isError,
+  isLoading,
+} = useQuery("messages", fetchMessages);
 
-//  async function fetchData() {
-//    const response = await axios.get(
-//      `https://sara7aiti.onrender.com/api/v1/message`,
-//      {
-//        headers: {
-//          token: localStorage.getItem("userToken"),
-//        },
-//      }
-//    );
-//    console.log(response.data)
-//    return response.data;
-//  }
-
-
-  // const { data, isLoading, isError, error } = useQuery("data", fetchData);
-
-async function getMassages(){
-  let { data } = await axios.get(
-    `https://sara7aiti.onrender.com/api/v1/message`,{
-      headers:{
-        token: localStorage.getItem("userToken")
+  async function fetchMessages() {
+    const response = await axios.get(
+      "https://sara7aiti.onrender.com/api/v1/message",
+      {
+        headers: {
+          token: localStorage.getItem("userToken"),
+        },
       }
-    }
-  );
-  setAllmassages(data.allMessages);
-  console.log(allmassages)}
+    );
+    console.log(response.data.allMessages);
+    return response.data.allMessages;
+  }
+
+
+// another method without use react-query 
+
+// async function getmessages(){
+//   let { data } = await axios.get(
+//     `https://sara7aiti.onrender.com/api/v1/message`,{
+//       headers:{
+//         token: localStorage.getItem("userToken")
+//       }
+//     }
+//   );
+//   setAllmessages(data.allMessages);
+//   console.log(allmessages)}
 
 function getuserId(){
   let decoded = jwtDecode(localStorage.getItem("userToken"));
@@ -56,7 +61,7 @@ function getuserId(){
 
 
 useEffect(()=>{
-getMassages()
+// getmessages()
 getuserId()
 },[])
 
@@ -83,7 +88,19 @@ getuserId()
         {/* =================messages=================== */}
         <div className="container text-center my-5 text-center">
           <div className="row">
-            {allmassages.length == 0 ? (
+            {isLoading ? (
+              <div className="col-md-12">
+                <div className="card py-5">
+                  <p>Loading...</p>
+                </div>
+              </div>
+            ) : isError ? (
+              <div className="col-md-12">
+                <div className="card py-5">
+                  <p>Error fetching messages</p>
+                </div>
+              </div>
+            ) : messages.length == 0 ? (
               <>
                 <div className="col-md-12">
                   <div className="card py-5">
@@ -94,7 +111,7 @@ getuserId()
             ) : (
               ""
             )}
-            {allmassages.map((ele) => (
+            {messages?.map((ele) => (
               <div key={ele._id} className="col-md-12">
                 <div className="card py-3 mb-3">
                   <p>{ele.messageContent} </p>
@@ -110,7 +127,7 @@ getuserId()
           <Modal.Title>Share Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Link to={"/massage/" + userId}>{url + "/massage/" + userId}</Link>
+          <Link to={"/message/" + userId}>{url + "/message/" + userId}</Link>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
