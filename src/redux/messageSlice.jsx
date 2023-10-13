@@ -14,16 +14,40 @@ import axios from "axios";
    return data;
  });
 
+export const postMessage = createAsyncThunk(
+  "messages/postMessage",
+  async (messageData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "https://sara7aiti.onrender.com/api/v1/message",
+        
+          messageData,
+        
+      );
+      
+      return response.data;
+    } catch (error) {
+      // console.log("error",error)
+      return rejectWithValue(error);
+    }
+  }
+);
 
-let messageSlice=createSlice({
-name:"message",
-initialState:{messages:[]},
-reducers:{},
-extraReducers:( builder)=>{
-    builder.addCase(getmessages.fulfilled,(state,action)=>{
-        state.messages=action.payload
-    })
-}
-})
+
+
+let messageSlice = createSlice({
+  name: "message",
+  initialState: { messages: [], loading:false },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getmessages.fulfilled, (state, action) => {
+      state.messages = action.payload;
+    });
+    builder.addCase(postMessage.fulfilled, (state, action) => {
+      state.loading = false;
+      console.log("msg suss", action.payload);
+    });
+  },
+});
 
  export let messageReducer =messageSlice.reducer;

@@ -5,6 +5,8 @@ import avaterImg from "../../images/avatar.png";
 import { useFormik } from 'formik';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { postMessage } from "../../redux/messageSlice";
 
 export default function Sendmessage() {
   let [userName, setuserName] = useState("");
@@ -12,22 +14,26 @@ export default function Sendmessage() {
   let[isloading,setisloading]=useState(false)
 
 
+let dispatch = useDispatch();
+//  axois method
+let { loading } = useSelector((state) => state.messageRed);
   async function addmessage( values){
     try {
       setisloading(true);
-      let data = {
-        ...values,
-        receivedId: recievedID.id,
-      };
+      // let data = {
+      //   ...values,
+      //   receivedId: recievedID.id,
+      // };
 
-      let res = await axios.post(
-        "https://sara7aiti.onrender.com/api/v1/message",
-        data
+      dispatch(
+        postMessage({
+          ...values,
+          receivedId: recievedID.id,
+        })
       );
-      console.log(res);
-      if (res.data.messaged == "Added"){
+      
+      if (loading == false) {  
         setisloading(false);
-
       } 
 
     } catch (error) {
@@ -38,6 +44,9 @@ export default function Sendmessage() {
   }
 
 
+
+  
+
 let formik = useFormik({
   initialValues: {
     messageContent:"",
@@ -45,6 +54,7 @@ let formik = useFormik({
   onSubmit:(values)=>{
     
  addmessage(values)
+ 
 
   }
 });
